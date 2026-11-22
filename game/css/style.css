@@ -1,36 +1,169 @@
+/* Vaultbreak — dark casino-floor theme. Gold for loot, red for the alarm,
+   green for the getaway. The canvas scales to the shell; the page itself
+   stays a fixed dark backdrop so the game reads the same at any size. */
+
 * { box-sizing: border-box; }
-body { margin: 0; background: #0b0f18; color: #e8ecf4; font-family: system-ui, -apple-system, sans-serif; }
-#app { max-width: 1020px; margin: 0 auto; padding: 12px; }
-#hud { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
-#hud h1 { margin: 0; font-size: 22px; color: #d4af37; }
-#level-name { color: #9db8e8; font-size: 13px; margin-top: 2px; }
-.hud-center { flex: 1; text-align: center; }
-#loot-state { font-size: 14px; margin-bottom: 6px; }
-#detect-wrap { position: relative; height: 18px; background: #222a3d; border-radius: 9px; overflow: hidden; border: 1px solid #3a4358; }
-#alarm-fill { height: 100%; width: 0%; background: #7dd3a8; transition: width .15s; }
-#alarm-label { position: absolute; inset: 0; font-size: 11px; line-height: 18px; color: #fff; text-shadow: 0 1px 2px #000; }
-#sub-line { font-size: 12px; color: #9aa7bd; margin-top: 5px; }
-.hud-right { text-align: right; }
-#score { font-size: 15px; }
-#hearts { color: #e5484d; font-size: 17px; letter-spacing: 2px; margin: 3px 0; }
-button { background: #2a3348; color: #e8ecf4; border: 1px solid #4a5570; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 13px; }
-button:hover { background: #38435e; }
-#stage { display: flex; justify-content: center; }
-#canvas { width: 960px; max-width: 100%; height: auto; border: 2px solid #3a4358; border-radius: 10px; background: #1b2233; }
-#helpbar { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; color: #9aa7bd; font-size: 12px; margin-top: 8px; }
-.overlay { position: fixed; inset: 0; background: rgba(5, 8, 14, .82); display: flex; align-items: center; justify-content: center; z-index: 10; }
-.overlay[hidden] { display: none; }
-.card { background: #141a29; border: 1px solid #3a4358; border-radius: 14px; padding: 26px 30px; max-width: 620px; margin: 16px; }
-.card h2 { margin: 0 0 4px; color: #d4af37; font-size: 28px; }
-.tagline { color: #9db8e8; margin: 0 0 10px; }
-.intro { line-height: 1.55; font-size: 14px; }
-.keys { color: #9aa7bd; font-size: 12px; }
-.credit { color: #6b7688; font-size: 11px; }
-#level-cards { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
-.level-card { text-align: left; padding: 10px 12px; background: #1e2739; display: flex; flex-direction: column; gap: 2px; }
-.level-card span { color: #9aa7bd; font-size: 12px; }
-#end-stars { color: #d4af37; font-size: 26px; letter-spacing: 4px; margin: 6px 0; }
-#end-detail { line-height: 1.5; font-size: 14px; }
-.btn-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
-#toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: #d4af37; color: #1b1405; font-weight: 600; padding: 9px 16px; border-radius: 999px; z-index: 20; box-shadow: 0 4px 18px rgba(0,0,0,.5); }
-#toast[hidden] { display: none; }
+
+body {
+  margin: 0;
+  background: #0a0b10;
+  color: #e5e7eb;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.shell {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 16px 16px 24px;
+}
+
+.topbar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: 4px;
+  color: #d4af37;
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 18px;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.stats strong { color: #f9fafb; }
+
+#hud-cams.down { color: #4ade80; }
+
+#btn-mute {
+  background: #1f2430;
+  color: #e5e7eb;
+  border: 1px solid #3d4252;
+  border-radius: 6px;
+  padding: 5px 10px;
+  font: inherit;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+#btn-mute:hover { background: #2b2f3a; }
+
+.alarm-wrap {
+  height: 8px;
+  margin: 10px 0 12px;
+  background: #1f2430;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#hud-alarm-fill {
+  height: 100%;
+  width: 0;
+  background: #f59e0b;
+  transition: width 0.15s linear;
+}
+
+#hud-alarm-fill.hot { background: #dc2626; }
+
+.stage {
+  position: relative;
+  border: 1px solid #2b2f3a;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #14161d;
+}
+
+#game {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: crosshair;
+  outline: none;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(5, 6, 10, 0.78);
+}
+
+.overlay.hidden { display: none; }
+
+.panel {
+  max-width: 520px;
+  margin: 16px;
+  padding: 24px 28px;
+  background: #14161d;
+  border: 1px solid #d4af37;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.panel h2 {
+  margin: 0 0 8px;
+  font-size: 30px;
+  letter-spacing: 3px;
+  color: #d4af37;
+}
+
+.panel h2.win { color: #4ade80; }
+
+.tagline { margin: 0 0 14px; color: #d1d5db; }
+
+.panel ul {
+  margin: 0 0 18px;
+  padding-left: 20px;
+  text-align: left;
+  line-height: 1.65;
+  color: #d1d5db;
+}
+
+.panel button {
+  background: #d4af37;
+  color: #111827;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 26px;
+  font: inherit;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.panel button:hover { background: #e5c15a; }
+
+.hint {
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+#end-stats { color: #d1d5db; line-height: 1.6; }
+
+.message {
+  min-height: 22px;
+  margin: 12px 0 4px;
+  text-align: center;
+  font-size: 15px;
+  color: #fbbf24;
+}
+
+.controls {
+  margin: 0;
+  text-align: center;
+  font-size: 13px;
+  color: #9ca3af;
+}

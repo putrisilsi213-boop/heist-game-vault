@@ -1,104 +1,111 @@
-// Vaultbreak — levels. All original: three vault rooms of the Halcyon Bank.
-// Coordinates are canvas pixels on a 960x600 floor. Walls and safes block
-// movement and line of sight; dark shadow zones hide the player; cameras sweep
-// fixed cones; the hack console disables every camera for 12 seconds.
-export const LEVELS = [
-  {
-    id: 1, name: 'The Marble Lobby', sub: 'Level 1 · crack the lobby vault, dodge one camera',
-    par: 75,
-    playerStart: [70, 530],
-    vault: [880, 70],
-    console: [120, 90],
-    exit: { x: 880, y: 500, w: 56, h: 76 },
-    walls: [
-      { x: 0, y: 0, w: 960, h: 18 }, { x: 0, y: 582, w: 960, h: 18 },
-      { x: 0, y: 0, w: 18, h: 600 }, { x: 942, y: 0, w: 18, h: 600 },
-      { x: 300, y: 120, w: 18, h: 220 }, { x: 300, y: 120, w: 200, h: 18 },
-      { x: 620, y: 300, w: 18, h: 180 }, { x: 620, y: 300, w: 180, h: 18 },
-    ],
-    crates: [
-      { x: 180, y: 200, w: 64, h: 64 }, { x: 180, y: 420, w: 64, h: 64 },
-      { x: 470, y: 120, w: 64, h: 64 }, { x: 470, y: 440, w: 64, h: 64 },
-      { x: 740, y: 180, w: 64, h: 64 }, { x: 740, y: 420, w: 64, h: 64 },
-    ],
-    shadows: [
-      { x: 120, y: 120, r: 42 }, { x: 560, y: 520, r: 42 }, { x: 860, y: 300, r: 40 },
-    ],
-    guards: [
-      { path: [[420, 200], [420, 480], [560, 480], [560, 200]], speed: 62, range: 175, fov: 1.25 },
-      { path: [[820, 160], [820, 420]], speed: 55, range: 165, fov: 1.25 },
-    ],
-    cameras: [
-      { x: 700, y: 24, base: Math.PI / 2, sweep: 0.9, speed: 0.55, range: 210, fov: 0.7 },
-    ],
-    gems: [[250, 90], [520, 330], [680, 90], [120, 330]],
-  },
-  {
-    id: 2, name: 'The Gold Gallery', sub: 'Level 2 · two cameras, three patrols, one hack console',
-    par: 95,
-    playerStart: [70, 70],
-    vault: [880, 530],
-    console: [480, 300],
-    exit: { x: 60, y: 500, w: 56, h: 76 },
-    walls: [
-      { x: 0, y: 0, w: 960, h: 18 }, { x: 0, y: 582, w: 960, h: 18 },
-      { x: 0, y: 0, w: 18, h: 600 }, { x: 942, y: 0, w: 18, h: 600 },
-      { x: 240, y: 220, w: 240, h: 18 }, { x: 480, y: 360, w: 240, h: 18 },
-      { x: 700, y: 120, w: 18, h: 160 },
-    ],
-    crates: [
-      { x: 150, y: 300, w: 64, h: 64 }, { x: 380, y: 90, w: 64, h: 64 },
-      { x: 560, y: 220, w: 64, h: 64 }, { x: 820, y: 300, w: 64, h: 64 },
-      { x: 320, y: 460, w: 64, h: 64 },
-    ],
-    shadows: [
-      { x: 120, y: 220, r: 44 }, { x: 480, y: 480, r: 44 }, { x: 700, y: 480, r: 40 },
-      { x: 880, y: 120, r: 42 },
-    ],
-    guards: [
-      { path: [[300, 140], [660, 140], [660, 300], [300, 300]], speed: 68, range: 180, fov: 1.25 },
-      { path: [[200, 480], [620, 480]], speed: 60, range: 170, fov: 1.2 },
-      { path: [[860, 200], [860, 480], [760, 480]], speed: 58, range: 170, fov: 1.25 },
-    ],
-    cameras: [
-      { x: 240, y: 24, base: Math.PI / 2, sweep: 0.8, speed: 0.6, range: 200, fov: 0.7 },
-      { x: 936, y: 300, base: Math.PI, sweep: 0.7, speed: 0.5, range: 200, fov: 0.7 },
-    ],
-    gems: [[120, 420], [360, 300], [620, 140], [880, 420], [520, 90]],
-  },
-  {
-    id: 3, name: 'The Diamond Vault', sub: 'Level 3 · four guards, three cameras, no room for noise',
-    par: 120,
-    playerStart: [70, 530],
-    vault: [480, 70],
-    console: [880, 300],
-    exit: { x: 880, y: 70, w: 56, h: 76 },
-    walls: [
-      { x: 0, y: 0, w: 960, h: 18 }, { x: 0, y: 582, w: 960, h: 18 },
-      { x: 0, y: 0, w: 18, h: 600 }, { x: 942, y: 0, w: 18, h: 600 },
-      { x: 220, y: 140, w: 18, h: 200 }, { x: 220, y: 140, w: 180, h: 18 },
-      { x: 560, y: 260, w: 18, h: 200 }, { x: 560, y: 260, w: 180, h: 18 },
-      { x: 740, y: 120, w: 18, h: 160 },
-    ],
-    crates: [
-      { x: 120, y: 140, w: 64, h: 64 }, { x: 330, y: 300, w: 64, h: 64 },
-      { x: 460, y: 440, w: 64, h: 64 }, { x: 660, y: 420, w: 64, h: 64 },
-      { x: 820, y: 300, w: 64, h: 64 }, { x: 120, y: 420, w: 64, h: 64 },
-    ],
-    shadows: [
-      { x: 300, y: 480, r: 42 }, { x: 620, y: 120, r: 42 }, { x: 880, y: 480, r: 40 },
-    ],
-    guards: [
-      { path: [[300, 220], [520, 220], [520, 480], [300, 480]], speed: 72, range: 185, fov: 1.25 },
-      { path: [[660, 140], [660, 520]], speed: 66, range: 180, fov: 1.25 },
-      { path: [[120, 300], [420, 300]], speed: 62, range: 170, fov: 1.2 },
-      { path: [[820, 160], [820, 420], [700, 420]], speed: 60, range: 175, fov: 1.25 },
-    ],
-    cameras: [
-      { x: 480, y: 24, base: Math.PI / 2, sweep: 1.0, speed: 0.65, range: 210, fov: 0.7 },
-      { x: 24, y: 300, base: 0, sweep: 0.8, speed: 0.55, range: 200, fov: 0.7 },
-      { x: 936, y: 480, base: -Math.PI / 2, sweep: 0.8, speed: 0.6, range: 200, fov: 0.7 },
-    ],
-    gems: [[200, 90], [480, 200], [700, 300], [880, 540], [60, 300], [380, 540]],
-  },
-];
+// Vaultbreak — level data for "The Meridian Vault".
+// One hand-built floor plan. Coordinates are pixels in a 960 x 600 world.
+// Walls are axis-aligned rectangles. Vault rooms sit along the top wall,
+// the lobby and exit sit along the bottom, and the hack console guards the
+// middle of the floor between them.
+
+export const WORLD = { width: 960, height: 600 };
+
+export const LEVEL = {
+  name: 'The Meridian Vault',
+  playerStart: { x: 480, y: 520 },
+
+  // Reach this zone after looting every vault to finish the heist.
+  exit: { x: 430, y: 544, w: 100, h: 40 },
+
+  walls: [
+    // Outer shell.
+    { x: 0, y: 0, w: 960, h: 16 },
+    { x: 0, y: 584, w: 960, h: 16 },
+    { x: 0, y: 0, w: 16, h: 600 },
+    { x: 944, y: 0, w: 16, h: 600 },
+
+    // Vault A room (left). Door gap in the bottom wall: x 130..190.
+    { x: 60, y: 50, w: 12, h: 180 },
+    { x: 60, y: 50, w: 200, h: 12 },
+    { x: 248, y: 50, w: 12, h: 180 },
+    { x: 60, y: 218, w: 70, h: 12 },
+    { x: 190, y: 218, w: 70, h: 12 },
+
+    // Vault B room (centre). Door gap in the bottom wall: x 450..510.
+    { x: 380, y: 50, w: 12, h: 180 },
+    { x: 380, y: 50, w: 200, h: 12 },
+    { x: 568, y: 50, w: 12, h: 180 },
+    { x: 380, y: 218, w: 70, h: 12 },
+    { x: 510, y: 218, w: 70, h: 12 },
+
+    // Vault C room (right). Door gap in the bottom wall: x 770..830.
+    { x: 700, y: 50, w: 12, h: 180 },
+    { x: 700, y: 50, w: 200, h: 12 },
+    { x: 888, y: 50, w: 12, h: 180 },
+    { x: 700, y: 218, w: 70, h: 12 },
+    { x: 830, y: 218, w: 70, h: 12 },
+
+    // Mid-floor partitions that break up the guard sightlines.
+    { x: 300, y: 280, w: 12, h: 140 },
+    { x: 648, y: 280, w: 12, h: 140 },
+
+    // Lobby walls with a wide centre gap leading to the exit.
+    { x: 180, y: 420, w: 240, h: 12 },
+    { x: 540, y: 420, w: 240, h: 12 },
+  ],
+
+  // Three safes. Stand close and hold E to crack one; loot appears inside.
+  vaults: [
+    { id: 'A', name: 'Gold Vault', x: 132, y: 120, w: 56, h: 40, value: 500 },
+    { id: 'B', name: 'Jewel Vault', x: 452, y: 120, w: 56, h: 40, value: 800 },
+    { id: 'C', name: 'Cash Vault', x: 772, y: 120, w: 56, h: 40, value: 650 },
+  ],
+
+  // Cash stacks. Hidden until their vault is cracked; walk over one to grab it.
+  loot: [
+    { vault: 'A', x: 110, y: 100, value: 200 },
+    { vault: 'A', x: 210, y: 100, value: 150 },
+    { vault: 'A', x: 160, y: 185, value: 150 },
+    { vault: 'B', x: 430, y: 100, value: 300 },
+    { vault: 'B', x: 530, y: 100, value: 250 },
+    { vault: 'B', x: 480, y: 185, value: 250 },
+    { vault: 'C', x: 750, y: 100, value: 250 },
+    { vault: 'C', x: 850, y: 100, value: 200 },
+    { vault: 'C', x: 800, y: 185, value: 200 },
+  ],
+
+  // The hack console. Hold E near it to knock the cameras out for 20 seconds
+  // and bleed off some of the alarm.
+  console: { x: 458, y: 305, w: 44, h: 30 },
+
+  // Guards walk their waypoint loops and chase the player when they spot one.
+  guards: [
+    {
+      name: 'Lobby Guard',
+      waypoints: [
+        { x: 120, y: 255 },
+        { x: 840, y: 255 },
+      ],
+      speed: 55,
+    },
+    {
+      name: 'West Guard',
+      waypoints: [
+        { x: 330, y: 260 },
+        { x: 330, y: 400 },
+      ],
+      speed: 50,
+    },
+    {
+      name: 'East Guard',
+      waypoints: [
+        { x: 630, y: 260 },
+        { x: 630, y: 400 },
+      ],
+      speed: 50,
+    },
+  ],
+
+  // Sentry cameras sweep back and forth. Hacking the console disables them.
+  cameras: [
+    { x: 300, y: 240, baseAngle: Math.PI / 2, sweep: 0.7, speed: 0.5 },
+    { x: 660, y: 240, baseAngle: Math.PI / 2, sweep: 0.7, speed: 0.5 },
+    { x: 480, y: 470, baseAngle: -Math.PI / 2, sweep: 0.6, speed: 0.65 },
+  ],
+};

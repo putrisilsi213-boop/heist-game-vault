@@ -1,34 +1,31 @@
-// Vaultbreak — a make.fun best-heist-game entry (Node 22, standard library only).
-// The game is this directory's game/ folder: plain static files a desktop browser loads
-// offline (game/index.html and its ES modules, no library and no network request), and
-// this program hands it in: it copies game/ and screenshots/ from beside this file to
-// /output and writes /output/dossier.json, the summary the judge reads, with the
-// vendored make.fun library.
+// Vaultbreak — entrypoint for the make.fun harness.
 //
-// Serve it locally with `node serve.ts`, then open http://localhost:8080.
-// Outside the grader's container, MAKEFUN_OUTPUT_DIR stands in for /output:
-//   mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+// Builds the entry dossier from this directory's game/ and screenshots/
+// with the kit's own buildDossier (vendor/makefun-game.ts) and writes it
+// to dossier.json next to this file. The scorer runs the same function on
+// what is handed in, so the dossier must be exactly what buildDossier
+// writes — never hand-edited.
+//
+// Caps come from the competition's gate: at most 163840 bytes of source
+// text, at most 4 screenshots of at most 262144 bytes each, at most 993
+// entries under game/.
+//
+// Run with: node main.ts
+// (Node 22+ runs this erasable TypeScript file as-is, no build step.)
 
-import { cpSync, existsSync, mkdirSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { createHash } from 'node:crypto';
+import { writeFileSync } from 'node:fs';
 import { buildDossier } from './vendor/makefun-game.ts';
 
-const here = fileURLToPath(new URL('.', import.meta.url));
-const out = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+const caps = {
+  text_max_bytes: 163840,
+  screenshots: { max: 4, max_bytes: 262144 },
+  game_max_files: 993,
+  game_max_bytes: 50331648,
+};
 
-mkdirSync(out, { recursive: true });
-cpSync(join(here, 'game'), join(out, 'game'), { recursive: true });
-mkdirSync(join(out, 'screenshots'), { recursive: true });
-if (existsSync(join(here, 'screenshots'))) cpSync(join(here, 'screenshots'), join(out, 'screenshots'), { recursive: true });
+const dossier = buildDossier('.', caps);
+writeFileSync('./dossier.json', dossier);
 
-writeFileSync(
-  join(out, 'dossier.json'),
-  buildDossier(out, {
-    text_max_bytes: 163840,
-    screenshots: { max: 4, max_bytes: 262144 },
-    game_max_files: 993,
-    game_max_bytes: 50331648,
-    game_path_max_bytes: 1000,
-  }),
-);
+const hash = createHash('sha256').update(dossier).digest('hex');
+console.log(`dossier.json: ${dossier.length} bytes, sha256 ${hash}`);

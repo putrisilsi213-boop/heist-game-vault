@@ -1,73 +1,61 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vaultbreak — Heist in the Halcyon Bank</title>
-<link rel="icon" href="data:,">
-<link rel="stylesheet" href="css/style.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vaultbreak — Top-Down Heist</title>
+  <link rel="stylesheet" href="./css/style.css">
 </head>
 <body>
-<div id="app">
-  <header id="hud">
-    <div class="hud-left">
-      <h1 id="game-title">💎 Vaultbreak</h1>
-      <div id="level-name">Level 1 · The Marble Lobby</div>
-    </div>
-    <div class="hud-center">
-      <div id="loot-state">◇ Star Diamond not yet taken</div>
-      <div id="detect-wrap"><div id="alarm-fill"></div><span id="alarm-label">Unseen</span></div>
-      <div id="sub-line"><span>💎 <b id="gem-count">0</b> gems</span> · <span>⏱ <b id="time-value">0:00</b></span> · <span id="cam-state"></span> · <span id="best-line"></span></div>
-    </div>
-    <div class="hud-right">
-      <div id="score">Score <b id="score-value">0</b></div>
-      <div id="hearts" title="Chances left">♥♥♥</div>
-      <button id="mute-btn" type="button" title="Sound on/off (M)">🔊</button>
-      <button id="menu-btn" type="button" title="Back to menu (Esc)">☰ Menu</button>
-    </div>
-  </header>
+  <main class="shell">
+    <header class="topbar">
+      <h1>VAULTBREAK</h1>
+      <div class="stats">
+        <span class="stat">Loot <strong id="hud-loot">$0 / $0</strong></span>
+        <span class="stat">Vaults <strong id="hud-vaults">0 / 3 vaults</strong></span>
+        <span class="stat">Time <strong id="hud-time">0:00</strong></span>
+        <span class="stat">Alarm <strong id="hud-alarm">0%</strong></span>
+        <span class="stat" id="hud-cams">Cameras: live</span>
+        <button id="btn-mute" type="button">Mute</button>
+      </div>
+    </header>
 
-  <main id="stage">
-    <canvas id="canvas" width="960" height="600"></canvas>
-  </main>
-
-  <footer id="helpbar">
-    <span>⌨️ <b>WASD / arrows</b> move · <b>Shift</b> sneak (quiet, slow) · <b>click</b> walk-to · <b>E</b> hack cameras</span>
-    <span>💎 Grab the Star Diamond, then reach the GETAWAY door · 📷 red cones are cameras · 🌑 shadows hide you</span>
-    <span><b>R</b> restart · <b>M</b> sound · <b>Esc</b> menu</span>
-  </footer>
-
-  <div class="overlay" id="menu-overlay">
-    <div class="card">
-      <h2>💎 Vaultbreak</h2>
-      <p class="tagline">A top-down heist game in the Halcyon Bank.</p>
-      <p class="intro">You are Kit, a thief with one night to crack the Halcyon Bank. Slip
-      past the patrolling guards and the sweeping wall cameras, grab the Star
-      Diamond from each vault, and reach the getaway door before the alarm
-      maxes out. Stand in the dark shadows to hide, sneak with Shift, or hack
-      the cameras at the console with E — they stay blind for 12 seconds.
-      Running is loud. Three vaults, three chances per vault.</p>
-      <div id="level-cards"></div>
-      <p class="keys">WASD / arrows to move · Shift to sneak · E to hack cameras · mouse click to walk to a spot · R restart · M sound.</p>
-      <p class="credit">Original art, sounds and names — drawn and synthesized in code for this entry.</p>
+    <div class="alarm-wrap" aria-label="Alarm meter">
+      <div id="hud-alarm-fill"></div>
     </div>
-  </div>
 
-  <div class="overlay" id="end-overlay" hidden>
-    <div class="card" id="end-card">
-      <h2 id="end-title">Vault cracked!</h2>
-      <div id="end-stars">★★★</div>
-      <p id="end-detail"></p>
-      <div class="btn-row">
-        <button id="replay-btn" type="button">↻ Replay (R)</button>
-        <button id="next-btn" type="button">Next vault → (N)</button>
-        <button id="end-menu-btn" type="button">☰ Menu</button>
+    <div class="stage">
+      <canvas id="game" tabindex="0"></canvas>
+
+      <div id="overlay-start" class="overlay">
+        <div class="panel">
+          <h2>VAULTBREAK</h2>
+          <p class="tagline">Three vaults. One crew: you. Get in, grab everything, get out.</p>
+          <ul>
+            <li><strong>WASD / arrows</strong> — move. <strong>Click</strong> — walk there.</li>
+            <li><strong>Shift</strong> — sneak (slower, harder to spot).</li>
+            <li><strong>Hold E</strong> — hack the console, crack a vault.</li>
+            <li>Guards and cameras fill the <strong>alarm meter</strong>. At 100%, you're busted.</li>
+            <li>Hack the console to kill the cameras for 20 seconds.</li>
+            <li>Loot all 3 vaults, then reach the green <strong>EXIT</strong>.</li>
+          </ul>
+          <button id="btn-start" type="button">Start the heist</button>
+          <p class="hint">M — mute &nbsp;·&nbsp; Enter — start / restart</p>
+        </div>
+      </div>
+
+      <div id="overlay-end" class="overlay hidden">
+        <div class="panel">
+          <h2 id="end-title">Busted!</h2>
+          <p id="end-stats"></p>
+          <button id="btn-again" type="button">Run it again</button>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div id="toast" hidden></div>
-</div>
-<script type="module" src="js/main.js"></script>
+    <p id="hud-message" class="message"></p>
+    <p class="controls">WASD / arrows — move &nbsp;·&nbsp; Click — walk there &nbsp;·&nbsp; Shift — sneak &nbsp;·&nbsp; E (hold) — hack / crack &nbsp;·&nbsp; M — mute</p>
+  </main>
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>
