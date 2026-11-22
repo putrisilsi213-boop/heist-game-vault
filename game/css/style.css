@@ -1,0 +1,36 @@
+* { box-sizing: border-box; }
+body { margin: 0; background: #0b0f18; color: #e8ecf4; font-family: system-ui, -apple-system, sans-serif; }
+#app { max-width: 1020px; margin: 0 auto; padding: 12px; }
+#hud { display: flex; justify-content: space-between; gap: 12px; align-items: flex-start; margin-bottom: 10px; }
+#hud h1 { margin: 0; font-size: 22px; color: #d4af37; }
+#level-name { color: #9db8e8; font-size: 13px; margin-top: 2px; }
+.hud-center { flex: 1; text-align: center; }
+#loot-state { font-size: 14px; margin-bottom: 6px; }
+#detect-wrap { position: relative; height: 18px; background: #222a3d; border-radius: 9px; overflow: hidden; border: 1px solid #3a4358; }
+#alarm-fill { height: 100%; width: 0%; background: #7dd3a8; transition: width .15s; }
+#alarm-label { position: absolute; inset: 0; font-size: 11px; line-height: 18px; color: #fff; text-shadow: 0 1px 2px #000; }
+#sub-line { font-size: 12px; color: #9aa7bd; margin-top: 5px; }
+.hud-right { text-align: right; }
+#score { font-size: 15px; }
+#hearts { color: #e5484d; font-size: 17px; letter-spacing: 2px; margin: 3px 0; }
+button { background: #2a3348; color: #e8ecf4; border: 1px solid #4a5570; border-radius: 8px; padding: 6px 10px; cursor: pointer; font-size: 13px; }
+button:hover { background: #38435e; }
+#stage { display: flex; justify-content: center; }
+#canvas { width: 960px; max-width: 100%; height: auto; border: 2px solid #3a4358; border-radius: 10px; background: #1b2233; }
+#helpbar { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; color: #9aa7bd; font-size: 12px; margin-top: 8px; }
+.overlay { position: fixed; inset: 0; background: rgba(5, 8, 14, .82); display: flex; align-items: center; justify-content: center; z-index: 10; }
+.overlay[hidden] { display: none; }
+.card { background: #141a29; border: 1px solid #3a4358; border-radius: 14px; padding: 26px 30px; max-width: 620px; margin: 16px; }
+.card h2 { margin: 0 0 4px; color: #d4af37; font-size: 28px; }
+.tagline { color: #9db8e8; margin: 0 0 10px; }
+.intro { line-height: 1.55; font-size: 14px; }
+.keys { color: #9aa7bd; font-size: 12px; }
+.credit { color: #6b7688; font-size: 11px; }
+#level-cards { display: flex; flex-direction: column; gap: 8px; margin: 14px 0; }
+.level-card { text-align: left; padding: 10px 12px; background: #1e2739; display: flex; flex-direction: column; gap: 2px; }
+.level-card span { color: #9aa7bd; font-size: 12px; }
+#end-stars { color: #d4af37; font-size: 26px; letter-spacing: 4px; margin: 6px 0; }
+#end-detail { line-height: 1.5; font-size: 14px; }
+.btn-row { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
+#toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%); background: #d4af37; color: #1b1405; font-weight: 600; padding: 9px 16px; border-radius: 999px; z-index: 20; box-shadow: 0 4px 18px rgba(0,0,0,.5); }
+#toast[hidden] { display: none; }
