@@ -15,6 +15,7 @@
 
 import { createHash } from 'node:crypto';
 import { writeFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { buildDossier } from './vendor/makefun-game.ts';
 
 const caps = {
@@ -24,8 +25,14 @@ const caps = {
   game_max_bytes: 50331648,
 };
 
-const dossier = buildDossier('.', caps);
-writeFileSync('./dossier.json', dossier);
+// Under the grader the repo is read-only, so the dossier goes to the
+// writable output dir when one is provided; locally it stays next to
+// this file, exactly as before.
+const botDir = process.env.MAKEFUN_BOT_DIR ?? '.';
+const outDir = process.env.MAKEFUN_OUTPUT_DIR ?? '.';
+
+const dossier = buildDossier(botDir, caps);
+writeFileSync(join(outDir, 'dossier.json'), dossier);
 
 const hash = createHash('sha256').update(dossier).digest('hex');
 console.log(`dossier.json: ${dossier.length} bytes, sha256 ${hash}`);
